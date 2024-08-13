@@ -1,0 +1,84 @@
+Get forecast data for a data source
+---
+tags:
+  - 3. Forecasting
+description: Get forecast data for a data source.
+parameters:
+  - name: datasource_id
+    in: path
+    required: true
+    type: string
+    description: The ID of the data source
+  - name: date
+    in: query
+    required: true
+    type: string
+    format: date-time
+    description: The date for forecasting
+    example: "2023-07-21T15:03:00Z"
+  - name: steps
+    in: query
+    required: true
+    type: integer
+    description: The number of steps to forecast
+    example: 10
+responses:
+  '200':
+    description: Forecast data retrieved successfully
+    schema:
+      type: object
+      properties:
+        forecasts:
+          type: array
+          description: A list of forecasts from different algorithms
+          items:
+            type: object
+            properties:
+              algorithm:
+                type: string
+                description: The forecasting algorithm used
+                example: "auto-regression"
+              dates:
+                type: array
+                description: The list of timestamps for the forecasted data points
+                items:
+                  type: string
+                  format: date-time
+                  example: "2024-01-01T00:00:00Z"
+              values:
+                type: array
+                description: The list of forecasted values corresponding to each date
+                items:
+                  type: number
+                  example: 95.9086375005
+        operation_time:
+          type: string
+          description: The time taken to complete the operation
+          example: "6.7391s"
+  '400':
+    description: Invalid query parameters
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Invalid query parameters"
+  '404':
+    description: Data source not found
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "No data source found with ID 123"
+  '500':
+    description: Failed to retrieve forecast data from the database
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Failed to retrieve data point from the database."

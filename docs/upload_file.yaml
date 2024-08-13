@@ -1,0 +1,44 @@
+Upload and initialize data for a specific data source
+---
+tags:
+  - 0. Initialization
+parameters:
+  - name: datasource_id
+    in: path
+    type: integer
+    required: true
+    description: ID of the data source to initialize
+    example: 1721643356
+  - name: file
+    in: formData
+    type: file
+    required: true
+    description: CSV file to upload and process ( first column for datetime and second column for values to predict )
+consumes:
+  - multipart/form-data
+responses:
+  202:
+    description: File upload accepted and processing started
+    schema:
+      type: object
+      properties:
+        task_id:
+          type: string
+          description: ID of the background task processing the file
+          example: 78fc8463-4354-498d-baf9-11706f5aca77
+  400:
+    description: Bad request
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+  404:
+    description: Data source not found
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message

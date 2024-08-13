@@ -1,0 +1,43 @@
+Train a data source
+---
+tags:
+  - 2. Training
+description: Train a data source with specified training data.
+parameters:
+  - name: datasource_id
+    in: path
+    required: true
+    type: string
+    description: The ID of the data source
+  - name: Training
+    in: body
+    schema:
+      $ref: '#/definitions/Training'
+    required: true
+definitions:
+  Training:
+    type: object
+    properties:
+      models:
+        type: array
+        items:
+          type: string
+          enum:
+            - auto-regression
+            - exponential smoothing
+        example: ["auto-regression", "exponential smoothing"]
+    required:
+      - models
+responses:
+  '202':
+    description: Training task started successfully
+    schema:
+      type: object
+      properties:
+        task_id:
+          type: string
+          description: The ID of the created task
+  '400':
+    description: Invalid JSON data provided or task couldn't be started
+  '404':
+    description: Data source not found

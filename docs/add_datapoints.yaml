@@ -1,0 +1,82 @@
+Add multiple data points to a specific data source
+---
+tags:
+  - 1. CRUD Data Points
+parameters:
+  - name: datasource_id
+    in: path
+    type: integer
+    required: true
+    description: ID of the data source to add the data points to
+    example: 1721643356
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/DataPoint'
+    description: The list of data points to be added
+consumes:
+  - application/json
+produces:
+  - application/json
+responses:
+  200:
+    description: Data points successfully added
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Confirmation message with the number of data points added
+  400:
+    description: Invalid input
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        invalid_datapoints:
+          type: array
+          items:
+            type: object
+            properties:
+              data:
+                type: object
+                description: The invalid data point
+              error:
+                type: string
+                description: Validation error message for this data point
+  404:
+    description: Data source not found
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+  500:
+    description: Internal server error
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+definitions:
+  DataPoint:
+    type: object
+    properties:
+      ts:
+        type: string
+        format: date-time
+        description: Timestamp of the data point
+      value:
+        type: number
+        description: Value of the data point
+        example: 1.0
+    required:
+      - ts
+      - value

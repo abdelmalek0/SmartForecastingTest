@@ -1,0 +1,32 @@
+Get the status of a task
+---
+tags:
+  - 4. Extra
+description: Get the status of a task.
+parameters:
+  - name: task_id
+    in: path
+    required: true
+    type: string
+    description: The ID of the task
+responses:
+  '200':
+    description: Task status retrieved successfully
+    schema:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of the task
+        current:
+          type: integer
+          description: The current progress (if applicable)
+        total:
+          type: integer
+          description: The total progress (if applicable)
+        percent_complete:
+          type: number
+          description: The percentage of completion (if applicable)
+        result:
+          type: string
+          description: The result of the task (if completed)

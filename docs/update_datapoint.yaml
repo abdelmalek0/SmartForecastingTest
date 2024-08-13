@@ -1,0 +1,26 @@
+Update a data point in a data source
+Update a data point in a data source.
+---
+tags:
+  - 1. CRUD Data Points
+description: Update a data point in a data source.
+parameters:
+  - name: datasource_id
+    in: path
+    required: true
+    type: string
+    description: The ID of the data source
+  - name: DataPoint
+    in: body
+    schema:
+      $ref: '#/definitions/DataPoint'
+    required: true
+responses:
+  '200':
+    description: Data point updated successfully
+  '400':
+    description: Invalid JSON data provided
+  '404':
+    description: Data source not found
+  '500':
+    description: Failed to update data point in the database

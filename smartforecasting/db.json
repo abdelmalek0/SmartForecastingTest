@@ -1,0 +1,12 @@
+{
+    "database": {
+        "host": "localhost",
+        "port": 8812,
+        "user": "admin",
+        "password": "quest",
+        "dbname": "tsdb",
+        "sslmode": "disable",
+        "data-sources-table-name": "dataSources",
+        "forecasting-table-name": "forecasting"
+    }
+}

@@ -1,0 +1,41 @@
+summary: Get all data points for a datasource
+description: Retrieve all data points for a given datasource ID.
+tags:
+  - 1. CRUD Data Points
+parameters:
+  - name: datasource_id
+    in: path
+    description: ID of the datasource
+    required: true
+    type: string
+responses:
+  200:
+    description: A list of data points
+    schema:
+      type: array
+      items:
+        type: object
+        properties:
+          ts:
+            type: string
+            format: date-time
+            example: '2023-01-01T00:00:00Z'
+          value:
+            type: number
+            example: 116
+  404:
+    description: Datasource not found or no data points available
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'No data points found for datasource ID 123'
+  500:
+    description: Internal server error
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: 'Failed to retrieve all data points from the database.'

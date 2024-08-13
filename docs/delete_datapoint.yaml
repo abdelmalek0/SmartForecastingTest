@@ -1,0 +1,59 @@
+tags:
+  - 1. CRUD Data Points
+summary: Delete a Data Point
+description: Delete a specific data point from a data source by its timestamp.
+parameters:
+  - in: path
+    name: datasource_id
+    required: true
+    description: ID of the data source
+    schema:
+      type: integer
+  - in: query
+    name: ts
+    required: true
+    description: Timestamp of the data point to delete in ISO 8601 format
+    schema:
+      type: string
+      example: "2023-01-01T00:00:00Z"
+responses:
+  200:
+    description: Data point deleted successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Data point with timestamp 2024-07-30T15:30:00 in data source ID 1 has been deleted successfully.
+  400:
+    description: Bad Request
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: Invalid timestamp format
+  404:
+    description: Data point not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: No data point found for data source ID 1 at timestamp 2024-07-30T15:30:00. Nothing was deleted.
+  500:
+    description: Internal Server Error
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: Failed to delete data point from the database.

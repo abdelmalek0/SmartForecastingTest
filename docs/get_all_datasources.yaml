@@ -1,0 +1,36 @@
+tags:
+  - 0. Initialization
+summary: Retrieve all data sources
+description: Returns a list of all data sources from the system.
+responses:
+  '200':
+    description: A list of data sources
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: The unique identifier of the data source.
+              name:
+                type: string
+                description: The name of the data source.
+              period:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - minute
+                      - hour
+                      - day
+                      - week
+                      - month
+                      - year
+                    description: The period type of the data source.
+                  value:
+                    type: number
+                    description: The period value of the data source.
