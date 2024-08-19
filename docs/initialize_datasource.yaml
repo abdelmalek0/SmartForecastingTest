@@ -1,13 +1,13 @@
-Upload and initialize data for a specific data source
+Upload and initialize data for a specific datasource
 ---
 tags:
-  - 0. Initialization
+  - Datasources
 parameters:
   - name: datasource_id
     in: path
     type: integer
     required: true
-    description: ID of the data source to initialize
+    description: ID of the datasource to initialize
     example: 1721643356
   - name: file
     in: formData
@@ -35,7 +35,7 @@ responses:
           type: string
           description: Error message
   404:
-    description: Data source not found
+    description: Datasource not found
     schema:
       type: object
       properties:

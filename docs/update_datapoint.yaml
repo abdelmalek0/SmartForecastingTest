@@ -2,7 +2,7 @@ Update a data point in a data source
 Update a data point in a data source.
 ---
 tags:
-  - 1. CRUD Data Points
+  - Datapoints
 description: Update a data point in a data source.
 parameters:
   - name: datasource_id

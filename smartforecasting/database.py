@@ -21,7 +21,7 @@ class DatabaseHandler:
         try:
             self.conn_pool = psycopg2.pool.SimpleConnectionPool(
                 minconn=1,
-                maxconn=10,
+                maxconn=20,
                 host=self.config['database']['host'],
                 port=self.config['database']['port'],
                 dbname=self.config['database']['dbname'],
@@ -391,16 +391,55 @@ class DatabaseHandler:
     
     def insert_forecasting_dataframe(self, df: pd.DataFrame, ds_id: int, algorithm: str):
         logger.info(f'Inserting forecasting data for data source ID: {ds_id}')
-
         table_name = self.config['database']['forecasting-table-name']
-        for index, row in df.iterrows():
-            # Create INSERT statement
-            insert_statement = sql.SQL("INSERT INTO {} (datasource_id, algorithm, ts, value) VALUES ({})").format(
-                sql.Identifier(table_name),
-                sql.SQL(', ').join(map(sql.Literal, [ds_id, algorithm] + row.to_list()))
-            )
-            # Execute INSERT statement
-            self.execute_statement(insert_statement)
+        data_length = len(df)
+        logger.info(f'Data length: {data_length}')
+
+        for index, row in enumerate(df.to_dict(orient='records')):
+            ts = row['ts']
+            value = row['value']
+            # logger.info(f'Processing row {index} with ts={ts} and value={value}')
+
+            # Check if the record exists
+            check_query = sql.SQL("""
+                SELECT COUNT(*) FROM {}
+                WHERE datasource_id = %s
+                AND algorithm = %s
+                AND ts = %s
+            """).format(sql.Identifier(table_name))
+
+            # logger.info('Executing check query')
+            self.execute_statement(check_query, (ds_id, algorithm, ts))
+            result = self.cursor.fetchone()
+            exists = result[0] > 0 if result else False
+            # logger.info(f'Record exists: {exists}')
+
+            if exists:
+                # Update existing record
+                update_statement = sql.SQL("""
+                    UPDATE {}
+                    SET value = %s
+                    WHERE datasource_id = %s
+                    AND algorithm = %s
+                    AND ts = %s
+                """).format(sql.Identifier(table_name))
+
+                # logger.info('Executing update statement')
+                self.execute_statement(update_statement, (value, ds_id, algorithm, ts))
+            else:
+                # Insert new record
+                insert_statement = sql.SQL("""
+                    INSERT INTO {} (datasource_id, algorithm, ts, value)
+                    VALUES (%s, %s, %s, %s)
+                """).format(sql.Identifier(table_name))
+
+                # logger.info('Executing insert statement')
+                self.execute_statement(insert_statement, (ds_id, algorithm, ts, value))
+                
+            if index % 10 == 0:
+                yield index, data_length
+
+        logger.info('Finished inserting forecasting data')
 
     def get_forecasting_data_for_datasource(self, ds_id: int) -> pd.DataFrame:
         logger.info(f"Retrieving all data for data source ID: {ds_id}")

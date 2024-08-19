@@ -2,7 +2,7 @@ Get a data point from a data source
 Get a data point from a data source.
 ---
 tags:
-  - 1. CRUD Data Points
+  - Datapoints
 description: Retrieve a specific data point from a data source using query parameters.
 parameters:
   - name: datasource_id

@@ -28,7 +28,7 @@ async def fetch_datasources() -> list:
 
     :return: List of data sources.
     """
-    response = requests.get(f'{API_BASE_URL}/datasources')
+    response = requests.get(f'{API_BASE_URL}/datasources/all')
     
     return response.json()
 

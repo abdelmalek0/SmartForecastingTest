@@ -1,7 +1,7 @@
 Train a data source
 ---
 tags:
-  - 2. Training
+  - Forecasting
 description: Train a data source with specified training data.
 parameters:
   - name: datasource_id

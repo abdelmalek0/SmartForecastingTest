@@ -1,7 +1,7 @@
 Get the status of a task
 ---
 tags:
-  - 4. Extra
+  - Status
 description: Get the status of a task.
 parameters:
   - name: task_id

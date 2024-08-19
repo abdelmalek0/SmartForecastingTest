@@ -12,90 +12,97 @@ class Chart:
     
     js = '''
     document.addEventListener("DOMContentLoaded", function() {
-         var options = {
-          series: [{
-          name: 'Real Data',
-          data: DATA_PLACEHOLDER
-        },{
-          name: 'Auto Regression Predictions',
-          data: AUTO_PLACEHOLDER
-        },{
-          name: 'Exponential Smoothing Predictions',
-          data: EXP_PLACEHOLDER
-        }
-        ],
-          chart: {
-          id: 'chart2',
-          type: 'line',
-          height: 400,
-          dropShadow: {
-              enabled: true,
-              enabledOnSeries: [1]
-          },
-          toolbar: {
-            autoSelected: 'pan',
-            show: false
-          }
-        },
-        colors: ['#FF003B','#008FFB', '#00E396'],
-        stroke: {
-          width: 2
-        },
-        xaxis: {
-          type: 'datetime'
-        },
-        yaxis: {
-			min: 0
-		}
+        var options = {
+            series: [
+                {
+                name: 'Real Data',
+                data: DATA_PLACEHOLDER
+                },
+                {
+                name: 'Auto Regression Predictions',
+                data: AUTO_PLACEHOLDER
+                },
+                {
+                name: 'Exponential Smoothing Predictions',
+                data: EXP_PLACEHOLDER
+                }
+            ],
+            chart: {
+                id: 'chart2',
+                type: 'line',
+                height: 400,
+                toolbar: {
+                    autoSelected: 'pan',
+                    show: false
+                }
+            },
+            colors: ['#FF003B','#008FFB', '#00E396'],
+            tooltip: {
+                enabled: true,
+                shared: true,
+                marker: {
+                    show: true
+                }
+            },
+            xaxis: {
+                type: 'datetime'
+            },
+            yaxis: {
+                min: 0
+            }
         };
 
         var chart = new ApexCharts(document.querySelector("#chart-line2"), options);
         chart.render();
       
         var optionsLine = {
-          series: [{
-          name: 'Real Data',
-          data: DATA_PLACEHOLDER
-        },{
-          name: 'Auto Regression Predictions',
-          data: AUTO_PLACEHOLDER
-        },{
-          name: 'Exponential Smoothing Predictions',
-          data: EXP_PLACEHOLDER
-        }],
-          chart: {
-          id: 'chart1',
-          height: 200,
-          type: 'line',
-          brush:{
-            target: 'chart2',
-            enabled: true
-          },
-          selection: {
-            enabled: true,
+            series: [
+                {
+                name: 'Real Data',
+                data: DATA_PLACEHOLDER
+                },
+                {
+                name: 'Auto Regression Predictions',
+                data: AUTO_PLACEHOLDER
+                },
+                {
+                name: 'Exponential Smoothing Predictions',
+                data: EXP_PLACEHOLDER
+                }
+            ],
+            chart: {
+                id: 'chart1',
+                height: 200,
+                type: 'line',
+                brush:{
+                    target: 'chart2',
+                    enabled: true
+                },
+                selection: {
+                    enabled: true,
+                    xaxis: {
+                        min: new Date('START_DATE').getTime(),
+                        max: new Date('END_DATE').getTime()
+                    }
+                },
+            },
+            colors: ['#FF003B', '#008FFB', '#00E396'],
+            stroke: {
+                width: 1
+            },
             xaxis: {
-              min: new Date('START_DATE').getTime(),
-              max: new Date('END_DATE').getTime()
+                type: 'datetime'
+            },
+            yaxis: {
+                tickAmount: 4,
+                min:0
+            },
+            dataLabels: {
+                enabled: false
+            },
+            legend: {
+                show: false
             }
-          },
-        },
-        colors: ['#FF003B', '#008FFB', '#00E396'],
-        stroke: {
-          width: 1
-        },
-        xaxis: {
-          type: 'datetime'
-        },
-        yaxis: {
-          tickAmount: 4,
-          min:0
-        },
-        dataLabels: {
-			enabled: false
-		},
-		legend: {
-			show: false
-		}
         };
 
         var chartLine = new ApexCharts(document.querySelector("#chart-line"), optionsLine);

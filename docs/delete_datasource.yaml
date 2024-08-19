@@ -1,19 +1,19 @@
-summary: Delete a data source
-description: |
-  Deletes a data source from the system. The data source is first checked for availability, and if it exists, it is removed from both Redis and the database.
+summary: Delete a datasource
+description: 
+  Deletes a datasource from the system. The datasource is first checked for availability, and if it exists, it is removed from both Redis and the database.
 tags:
-  - 0. Initialization
+  - Datasources
 parameters:
   - name: datasource_id
     in: path
-    description: The ID of the data source to delete.
+    description: The ID of the datasource to delete.
     required: true
     schema:
       type: integer
       example: 123
 responses:
   '200':
-    description: Data source successfully deleted
+    description: Datasource successfully deleted
     content:
       application/json:
         schema:
@@ -21,9 +21,9 @@ responses:
           properties:
             message:
               type: string
-              example: Data source with ID 123 has been deleted!
+              example: Datasource with ID 123 has been deleted!
   '400':
-    description: Bad request, could not delete the data source
+    description: Bad request, could not delete the datasource
     content:
       application/json:
         schema:
@@ -31,9 +31,9 @@ responses:
           properties:
             error:
               type: string
-              example: Could not delete data source with ID 123
+              example: Could not delete datasource with ID 123
   '404':
-    description: Data source not found
+    description: Datasource not found
     content:
       application/json:
         schema:
@@ -41,4 +41,4 @@ responses:
           properties:
             error:
               type: string
-              example: No data source found with ID 123
+              example: No datasource found with ID 123

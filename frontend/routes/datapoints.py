@@ -64,14 +64,15 @@ def get_data_point(date_str, y):
     base_date = datetime.fromisoformat(date_str)
     x = base_date.timestamp() * 1000
     return [x, y]
+
 def generate_chart(datapoints):
     main_data_range = []
     main_data = []
     auto_data = []
     exp_data = []
     for datapoint in datapoints[::-1]:
-        if datapoint["value"]:
-            main_data.append(get_data_point(datapoint["ts"], datapoint["value"]))
+        # if datapoint["value"]:
+        main_data.append(get_data_point(datapoint["ts"], datapoint["value"]))
         auto_data.append(get_data_point(datapoint["ts"], datapoint["AutoReg"]))
         exp_data.append(get_data_point(datapoint["ts"], datapoint["ExpSmoothing"]))
         
@@ -119,6 +120,8 @@ async def datapoints(request: Request):
         if datasource_id != -1 and len(datapoints['data'])
         else [] 
     )
+    minDate = datapoints['minDate'] if datasource_id != -1 else None
+    maxDate = datapoints['maxDate'] if datasource_id != -1 else None
     
     return Div(
                 Div(
@@ -132,7 +135,7 @@ async def datapoints(request: Request):
                             Select(
                                 *(await generate_options_ui(datasources, datasource_id)),
                                 cls='select select-primary max-w-xs bg-gray-50',
-                                hx_on="change: this.value ? window.location.href = '/datapoints/' + encodeURIComponent(this.value)  : ''"
+                                hx_on="change: this.value ? window.location.href = '/datapoints/' + encodeURIComponent(this.value) + '?latest=200' : ''"
                             ),
                             Label(
                                 Input(type='checkbox'),
@@ -151,8 +154,8 @@ async def datapoints(request: Request):
                         DateFilter(
                             start_date, 
                             end_date,
-                            datapoints['minDate'],
-                            datapoints['maxDate']
+                            minDate,
+                            maxDate
                         ),
                         cls='flex flex-row items-center w-screen justify-between px-6'
                     ),

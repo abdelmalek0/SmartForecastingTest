@@ -3,6 +3,7 @@ from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.ar_model import AutoReg
 import pandas as pd
 import numpy as np
+from logging_config import logger
 
 def generate_range_datetime(start_date_str, end_date_str, frequency):
     # Convert strings to pandas datetime objects
@@ -114,11 +115,11 @@ def reconstruct_series_from_stationary(diff_series: pd.Series, n_diffs: int) -> 
     """
     # Initialize the reconstructed series with the differenced series
     series = diff_series.copy()
-
+    
     # Reverse differencing by cumulatively summing the series
     for _ in range(n_diffs):
         series = series.cumsum()
-
+    
     return series
 
 def find_best_lag_pvalues(data, max_lag, significance_level=0.05):

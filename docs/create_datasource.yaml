@@ -1,7 +1,7 @@
-summary: Create a new data source
+summary: Create a new datasource
 tags:
-  - 0. Initialization
-description: Create a new data source with specified information.
+  - Datasources
+description: Create a new datasource with specified information.
 parameters:
   - name: DataSourceInfo
     in: body
@@ -41,12 +41,12 @@ definitions:
       - value
 responses:
   '200':
-    description: Successfully created a data source
+    description: Successfully created a datasource
     schema:
       type: object
       properties:
         id:
           type: integer
-          description: The ID of the newly created data source
+          description: The ID of the newly created datasource
   '400':
     description: Invalid JSON data provided

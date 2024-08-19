@@ -1,12 +1,13 @@
 from fasthtml.common import *
 from dataclasses import dataclass
+import json
 
 @dataclass
 class DateFilter:
     start_date: str
     end_date: str
-    min_date: str
-    max_date: str
+    min_date: str | None
+    max_date: str | None
 
     def create_input(self, name: str, value: str, placeholder: str) -> Input:
         """Helper method to create an input field with common styling."""
@@ -17,11 +18,9 @@ class DateFilter:
             placeholder=placeholder,
             cls='input input-bordered join-item bg-white w-[250px] date'
         )
-
-    def __ft__(self) -> Form:
-        """Create a form for filtering dates."""
-        return Form(
-            Script('''
+    
+    def get_flatpicker_config(self):
+        return '''
                    $(document).ready(function() {
                         $(".date").flatpickr({
                             enableTime: true,
@@ -30,12 +29,20 @@ class DateFilter:
                             altFormat: "Z",
                             utc: true, // This ensures UTC time is used
                             time_24hr: true, // Use 24-hour format
-                            minDate: "MAX_PLACEHOLDER",  
-                            maxDate: "MIN_PLACEHOLDER",
+                            minDate: MAX_PLACEHOLDER,  
+                            maxDate: MIN_PLACEHOLDER,
                         })
                    });
-                   '''.replace('MIN_PLACEHOLDER', self.min_date).replace(
-                       'MAX_PLACEHOLDER', self.max_date)
+                '''
+
+    def __ft__(self) -> Form:
+        """Create a form for filtering dates."""
+        return Form(
+            Script(
+                
+                self.get_flatpicker_config().replace(
+                    'MIN_PLACEHOLDER', json.dumps(self.min_date)).replace(
+                    'MAX_PLACEHOLDER', json.dumps(self.max_date))  
                    ),
             Style('''
                   .flatpickr-calendar {

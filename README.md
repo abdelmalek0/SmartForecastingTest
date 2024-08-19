@@ -11,3 +11,9 @@ Welcome to **SmartForecasting**! This cutting-edge service is designed to foreca
 5. [Configuration](#configuration)
 6. [Contributing](#contributing)
 7. [License](#license)
+
+# To ADD
+- Add Exclusion of time and date 
+- Add multiple Missing values solutions
+- Fixing Current algorithms for some data types
+- Adding prophet to make it as the standard forecasting algorithm

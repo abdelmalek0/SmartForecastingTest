@@ -1,7 +1,7 @@
 Get forecast data for a data source
 ---
 tags:
-  - 3. Forecasting
+  - Forecasting
 description: Get forecast data for a data source.
 parameters:
   - name: datasource_id

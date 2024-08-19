@@ -1,7 +1,7 @@
 summary: Get all data points for a datasource  + Forecast data
 description: Retrieve all data points for a given datasource ID + Forecast data.
 tags:
-  - 1. CRUD Data Points
+  - Datapoints
 parameters:
   - name: datasource_id
     in: path

@@ -1,7 +1,7 @@
 Add multiple data points to a specific data source
 ---
 tags:
-  - 1. CRUD Data Points
+  - Datapoints
 parameters:
   - name: datasource_id
     in: path

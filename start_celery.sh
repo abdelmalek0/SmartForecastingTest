@@ -7,4 +7,4 @@ export PYTHONPATH=/home/debian/SmartForecasting
 cd /home/debian/SmartForecasting/smartforecasting
 
 # Run Celery worker within the Poetry environment
-exec /home/debian/.local/bin/poetry run celery -A async_tasks worker --loglevel=info --logfile=/home/debian/SmartForecasting/logs/celery_worker.log --pidfile=/home/debian/SmartForecasting/logs/celery_worker.pid
+exec /home/debian/.local/bin/poetry run celery -A smartforecasting.run.celery worker --loglevel=info --logfile=/home/debian/SmartForecasting/logs/celery_worker.log --pidfile=/home/debian/SmartForecasting/logs/celery_worker.pid

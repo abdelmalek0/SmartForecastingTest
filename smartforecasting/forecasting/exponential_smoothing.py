@@ -8,12 +8,12 @@ from forecasting.utility import *
 class ExponentialSmoothing(ForecastStrategy):
     def train(self, data, frequency = '1D'):
         logger.info('Training Data with Exponential smoothing ...')
-        logger.info(data['ts'])
+        original_data = data.copy()
         data.index = data['ts']
         data.index = pd.to_datetime(data.index)
         
         
-        # Step 1: Generate a complete datetime index from 08:30 to 17:30 every 30 mins
+        # Step 1: Generate a complete datetime index
         full_index = pd.date_range(start=data.index.min(), end=data.index.max(), freq=frequency)
 
         # Step 2: Reindex your DataFrame to this complete datetime index
@@ -21,7 +21,7 @@ class ExponentialSmoothing(ForecastStrategy):
         data['ts'] = data.index
         data.index.freq = frequency
         # Step 3: Interpolate or impute missing values
-        data['value'] = data['value'].interpolate(method='linear')
+        data['value'] = data['value'].fillna(0.0)
         
         model = ES(data['value'], trend='add', seasonal='add', freq=frequency,
                    seasonal_periods=get_seasonal_periods(frequency)).fit()
@@ -41,13 +41,19 @@ class ExponentialSmoothing(ForecastStrategy):
         start_index = 0 # The index in df where the forecast starts
         end_index = len(data) - 1  # The index in df where the forecast ends
         
-        forecast = list(model.predict(start=start_index, end=end_index))
+        forecast = model.predict(start=start_index, end=end_index)
         
         # Create a new DataFrame for the forecasted values
         forecast_data = pd.DataFrame({
-            'ts': list(data.iloc[start_index:end_index + 1,0]),
-            'value': forecast
+            'ts': forecast.index,
+            'value': list(forecast)
         })
+        
+        forecast_data = forecast_data[forecast_data['ts'].isin(original_data['ts'])]
+        forecast_data.loc[:, 'value'] = forecast_data['value'].fillna(0)
+        forecast_data['value'] = forecast_data['value'].clip(lower=0)
+        
+        logger.info(len(forecast_data))
         logger.info(f'forecast_data: {forecast_data}')
         return forecast_data
     
@@ -111,7 +117,8 @@ class ExponentialSmoothing(ForecastStrategy):
             # logger.info('result: ', result)
             data = pd.concat([data, new_row], ignore_index=True)
             
-        logger.info(data)
+        data['value'] = data['value'].clip(lower=0)
+        data = data[data['value'] != 0.0]
         return data
 
     def get_nb_lags_needed(self) -> int:
