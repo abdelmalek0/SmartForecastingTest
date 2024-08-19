@@ -30,7 +30,7 @@ class Chart:
             chart: {
                 id: 'chart2',
                 type: 'line',
-                height: 400,
+                height: 300,
                 toolbar: {
                     autoSelected: 'pan',
                     show: false

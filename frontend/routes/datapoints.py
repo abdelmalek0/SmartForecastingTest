@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import pandas as pd
 import matplotlib.ticker as ticker
+from components.card import Card
 
 async def generate_options_ui(datasources: list, selected_datasource_id: int) -> list:
     """
@@ -123,6 +124,28 @@ async def datapoints(request: Request):
     minDate = datapoints['minDate'] if datasource_id != -1 else None
     maxDate = datapoints['maxDate'] if datasource_id != -1 else None
     
+    cards_content = []
+    if datasource_id != -1:
+        y_actual_exp = []
+        y_exp = []
+        y_actual_auto = []
+        y_auto = []
+        for datapoint in datapoints['data'][::-1]:
+            if datapoint["value"] and datapoint["AutoReg"]:
+                y_actual_auto.append(datapoint["value"])
+                y_auto.append(datapoint["AutoReg"])
+            if datapoint["value"] and datapoint["ExpSmoothing"]:
+                y_actual_exp.append(datapoint["value"])
+                y_exp.append(datapoint["ExpSmoothing"])
+        
+        rmse_auto = np.sqrt(((np.array(y_auto) - y_actual_auto) ** 2).mean())
+        rmse_exp = np.sqrt(((np.array(y_exp) - y_actual_exp) ** 2).mean())
+        if len(y_auto):
+            cards_content.append(Card("Auto Regression", rmse_auto))    
+        if len(y_exp):
+            cards_content.append(Card("Exponential Smoothing", rmse_exp))    
+                
+    
     return Div(
                 Div(
                     Navbar(index=2),
@@ -160,9 +183,15 @@ async def datapoints(request: Request):
                         cls='flex flex-row items-center w-screen justify-between px-6'
                     ),
                     Div(
-                        *chart_content,
+                        Div(
+                            *cards_content,
+                            cls='flex flex-row px-4 space-x-4'
+                            ),
+                        Div(
+                            *chart_content,    
+                        ),
                         x_show="!table",
-                        cls='p-5 w-screen'
+                        cls='p-5 w-screen h-screen'
                         ),
                     Div(
                         Table(
